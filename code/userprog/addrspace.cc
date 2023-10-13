@@ -163,9 +163,11 @@ bool AddrSpace::Load(char *fileName)
         DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
         executable->ReadAt(&(kernel->machine->mainMemory[pageTable[(noffH.code.virtualAddr) / PageSize].physicalPage * PageSize + (noffH.code.virtualAddr % PageSize)]), noffH.code.size, noffH.code.inFileAddr);
     }
+    //cout << "Initializing data segment." << noffH.initData.virtualAddr << noffH.initData.size << endl;
     if (noffH.initData.size > 0)
     {
         DEBUG(dbgAddr, "Initializing data segment.");
+        //cout << "Initializing data segment." << noffH.initData.virtualAddr << noffH.initData.size << endl;
         DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
         executable->ReadAt(&(kernel->machine->mainMemory[pageTable[(noffH.initData.virtualAddr) / PageSize].physicalPage * PageSize + (noffH.initData.virtualAddr % PageSize)]), noffH.initData.size, noffH.initData.inFileAddr);
     }
@@ -182,23 +184,24 @@ bool AddrSpace::Load(char *fileName)
 //	"fileName" is the file containing the object code to load into memory
 //----------------------------------------------------------------------
 
-void
-AddrSpace::Execute(char *fileName)
+void AddrSpace::Execute(char *fileName)
 {
-    if (!Load(fileName)) {
-	cout << "inside !Load(FileName)" << endl;
-	return;				// executable not found
+    if (!Load(fileName))
+    {
+        cout << "inside !Load(FileName)" << endl;
+        return;				// executable not found
     }
 
     //kernel->currentThread->space = this;
+    //cout << "first time ? " << endl;
     this->InitRegisters();		// set the initial register values
     this->RestoreState();		// load page table register
 
     kernel->machine->Run();		// jump to the user progam
 
     ASSERTNOTREACHED();			// machine->Run never returns;
-					// the address space exits
-					// by doing the syscall "exit"
+                                // the address space exits
+                                // by doing the syscall "exit"
 }
 
 
@@ -212,14 +215,13 @@ AddrSpace::Execute(char *fileName)
 //	when this thread is context switched out.
 //----------------------------------------------------------------------
 
-void
-AddrSpace::InitRegisters()
+void AddrSpace::InitRegisters()
 {
     Machine *machine = kernel->machine;
     int i;
 
     for (i = 0; i < NumTotalRegs; i++)
-	machine->WriteRegister(i, 0);
+        machine->WriteRegister(i, 0);
 
     // Initial program counter -- must be location of "Start"
     machine->WriteRegister(PCReg, 0);
@@ -228,9 +230,9 @@ AddrSpace::InitRegisters()
     // of branch delay possibility
     machine->WriteRegister(NextPCReg, 4);
 
-   // Set the stack register to the end of the address space, where we
-   // allocated the stack; but subtract off a bit, to make sure we don't
-   // accidentally reference off the end!
+    // Set the stack register to the end of the address space, where we
+    // allocated the stack; but subtract off a bit, to make sure we don't
+    // accidentally reference off the end!
     machine->WriteRegister(StackReg, numPages * PageSize - 16);
     DEBUG(dbgAddr, "Initializing stack pointer: " << numPages * PageSize - 16);
 }

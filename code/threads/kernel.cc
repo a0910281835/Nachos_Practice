@@ -27,22 +27,34 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
     randomSlice = FALSE;
     type = RR;
 
-    for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-rs") == 0) {
- 	    ASSERT(i + 1 < argc);
-	    RandomInit(atoi(argv[i + 1]));// initialize pseudo-random
-					// number generator
-	    randomSlice = TRUE;
-	    i++;
-        } else if (strcmp(argv[i], "-u") == 0) {
+    for (int i = 1; i < argc; i++)
+    {
+        if (strcmp(argv[i], "-rs") == 0)
+        {
+            ASSERT(i + 1 < argc);
+            RandomInit(atoi(argv[i + 1]));// initialize pseudo-random
+                                          // number generator
+            randomSlice = TRUE;
+            i++;
+        }
+        else if (strcmp(argv[i], "-u") == 0)
+        {
             cout << "Partial usage: nachos [-rs randomSeed]\n";
-	} else if(strcmp(argv[i], "RR") == 0) {
+        }
+        else if(strcmp(argv[i], "RR") == 0)
+        {
             type = RR;
-        } else if (strcmp(argv[i], "FCFS") == 0) {
+        }
+        else if (strcmp(argv[i], "FCFS") == 0)
+        {
             type = FIFO;
-        } else if (strcmp(argv[i], "PRIORITY") == 0) {
+        }
+        else if (strcmp(argv[i], "PRIORITY") == 0)
+        {
             type = Priority;
-        } else if (strcmp(argv[i], "SJF") == 0) {
+        }
+        else if (strcmp(argv[i], "SJF") == 0)
+        {
             type = SJF;
         }
     }
@@ -94,8 +106,7 @@ ThreadedKernel::~ThreadedKernel()
 //	start a user program to print the login prompt.
 //----------------------------------------------------------------------
 
-void
-ThreadedKernel::Run()
+void ThreadedKernel::Run()
 {
     // NOTE: if the procedure "main" returns, then the program "nachos"
     // will exit (as any other normal program would).  But there may be
@@ -111,8 +122,8 @@ ThreadedKernel::Run()
 //      Test whether this module is working.
 //----------------------------------------------------------------------
 
-void
-ThreadedKernel::SelfTest() {
+void ThreadedKernel::SelfTest()
+{
    Semaphore *semaphore;
    SynchList<int> *synchList;
 

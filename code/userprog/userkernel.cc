@@ -17,32 +17,36 @@
 //	for the initialization (see also comments in main.cc)
 //----------------------------------------------------------------------
 
-UserProgKernel::UserProgKernel(int argc, char **argv)
-		: ThreadedKernel(argc, argv)
+UserProgKernel::UserProgKernel(int argc, char **argv) : ThreadedKernel(argc, argv)
 {
     debugUserProg = FALSE;
-	execfileNum=0;
-    for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-s") == 0) {
-	    debugUserProg = TRUE;
-	}
-	else if (strcmp(argv[i], "-e") == 0) {
-		execfile[++execfileNum]= argv[++i];
-	}
-    	 else if (strcmp(argv[i], "-u") == 0) {
-		cout << "===========The following argument is defined in userkernel.cc" << endl;
-		cout << "Partial usage: nachos [-s]\n";
-		cout << "Partial usage: nachos [-u]" << endl;
-		cout << "Partial usage: nachos [-e] filename" << endl;
-	}
-	else if (strcmp(argv[i], "-h") == 0) {
-		cout << "argument 's' is for debugging. Machine status  will be printed " << endl;
-		cout << "argument 'e' is for execting file." << endl;
-		cout << "atgument 'u' will print all argument usage." << endl;
-		cout << "For example:" << endl;
-		cout << "	./nachos -s : Print machine status during the machine is on." << endl;
-		cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
-	}
+    execfileNum=0;
+    for (int i = 1; i < argc; i++)
+    {
+        if (strcmp(argv[i], "-s") == 0)
+        {
+            debugUserProg = TRUE;
+        }
+        else if (strcmp(argv[i], "-e") == 0)
+        {
+            execfile[++execfileNum]= argv[++i];
+        }
+        else if (strcmp(argv[i], "-u") == 0)
+        {
+            cout << "===========The following argument is defined in userkernel.cc" << endl;
+            cout << "Partial usage: nachos [-s]\n";
+            cout << "Partial usage: nachos [-u]" << endl;
+            cout << "Partial usage: nachos [-e] filename" << endl;
+        }
+        else if (strcmp(argv[i], "-h") == 0)
+        {
+            cout << "argument 's' is for debugging. Machine status  will be printed " << endl;
+            cout << "argument 'e' is for execting file." << endl;
+            cout << "atgument 'u' will print all argument usage." << endl;
+            cout << "For example:" << endl;
+            cout << "	./nachos -s : Print machine status during the machine is on." << endl;
+            cout << "	./nachos -e file1 -e file2 : executing file1 and file2."  << endl;
+        }
     }
 }
 
@@ -51,8 +55,7 @@ UserProgKernel::UserProgKernel(int argc, char **argv)
 // 	Initialize Nachos global data structures.
 //----------------------------------------------------------------------
 
-void
-UserProgKernel::Initialize()
+void UserProgKernel::Initialize()
 {
     ThreadedKernel::Initialize();	// init multithreading
 
@@ -82,24 +85,22 @@ UserProgKernel::~UserProgKernel()
 // UserProgKernel::Run
 // 	Run the Nachos kernel.  For now, just run the "halt" program.
 //----------------------------------------------------------------------
-void
-ForkExecute(Thread *t)
+void ForkExecute(Thread *t)
 {
 	t->space->Execute(t->getName());
 }
 
-void
-UserProgKernel::Run()
+void UserProgKernel::Run()
 {
 
 	cout << "Total threads number is " << execfileNum << endl;
 	for (int n=1;n<=execfileNum;n++)
-		{
-		t[n] = new Thread(execfile[n]);
-		t[n]->space = new AddrSpace();
-		t[n]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
-		cout << "Thread " << execfile[n] << " is executing." << endl;
-		}
+    {
+        t[n] = new Thread(execfile[n]);
+        t[n]->space = new AddrSpace();
+        t[n]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[n]);
+        cout << "Thread " << execfile[n] << " is executing." << endl;
+    }
 //	Thread *t1 = new Thread(execfile[1]);
 //	Thread *t1 = new Thread("../test/test1");
 //	Thread *t2 = new Thread("../test/test2");
@@ -120,8 +121,9 @@ UserProgKernel::Run()
 //      Test whether this module is working.
 //----------------------------------------------------------------------
 
-void
-UserProgKernel::SelfTest() {
+void UserProgKernel::SelfTest()
+{
+    //cout << "userkernel selftest " << endl;
 /*    char ch;
 
     ThreadedKernel::SelfTest();

@@ -22,8 +22,18 @@
 
 Alarm::Alarm(bool doRandom)
 {
+    //cout << "creat timer " << endl;
     timer = new Timer(doRandom, this);
 }
+
+
+Alarm::~Alarm()
+{
+    //cout << " delete timer class " << endl;
+    delete timer;
+}
+
+
 
 //----------------------------------------------------------------------
 // Alarm::CallBack
@@ -48,12 +58,14 @@ Alarm::Alarm(bool doRandom)
 
 void Alarm::CallBack()
 {
+    //cout << "time alarm" <<endl;
     Interrupt *interrupt = kernel->interrupt;
     MachineStatus status = interrupt->getStatus();
 
     kernel->currentThread->setPriority(kernel->currentThread->getPriority() - 1);
     if (status == IdleMode)
     {	// is it time to quit?
+        //cout << "Cond1" << endl;
         if (!interrupt->AnyFutureInterrupts())
         {
             timer->Disable();	// turn off the timer
@@ -61,6 +73,8 @@ void Alarm::CallBack()
     }
     else
     {			// there's someone to preempt
+        //cout << "Cond2" << endl;
+        // There use RR
         if(kernel->scheduler->getSchedulerType() == RR || kernel->scheduler->getSchedulerType() == Priority )
         {
             interrupt->YieldOnReturn();
