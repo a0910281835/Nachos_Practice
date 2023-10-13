@@ -1,8 +1,8 @@
-// kernel.cc 
+// kernel.cc
 //	Initialization and cleanup routines for the Nachos kernel.
 //
 // Copyright (c) 1992-1996 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
@@ -18,13 +18,13 @@
 
 //----------------------------------------------------------------------
 // ThreadedKernel::ThreadedKernel
-// 	Interpret command line arguments in order to determine flags 
-//	for the initialization (see also comments in main.cc)  
+// 	Interpret command line arguments in order to determine flags
+//	for the initialization (see also comments in main.cc)
 //----------------------------------------------------------------------
 
 ThreadedKernel::ThreadedKernel(int argc, char **argv)
 {
-    randomSlice = FALSE; 
+    randomSlice = FALSE;
     type = RR;
 
     for (int i = 1; i < argc; i++) {
@@ -50,7 +50,7 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 
 //----------------------------------------------------------------------
 // ThreadedKernel::Initialize
-// 	Initialize Nachos global data structures.  Separate from the 
+// 	Initialize Nachos global data structures.  Separate from the
 //	constructor because some of these refer to earlier initialized
 //	data via the "kernel" global variable.
 //----------------------------------------------------------------------
@@ -65,8 +65,8 @@ ThreadedKernel::Initialize()
 
     // We didn't explicitly allocate the current thread we are running in.
     // But if it ever tries to give up the CPU, we better have a Thread
-    // object to save its state. 
-    currentThread = new Thread("main");		
+    // object to save its state.
+    currentThread = new Thread("main");
     currentThread->setStatus(RUNNING);
 
     interrupt->Enable();
@@ -83,7 +83,7 @@ ThreadedKernel::~ThreadedKernel()
     delete scheduler;
     delete interrupt;
     delete stats;
-    
+
     Exit(0);
 }
 
@@ -99,10 +99,10 @@ ThreadedKernel::Run()
 {
     // NOTE: if the procedure "main" returns, then the program "nachos"
     // will exit (as any other normal program would).  But there may be
-    // other threads on the ready list (started in SelfTest).  
-    // We switch to those threads by saying that the "main" thread 
+    // other threads on the ready list (started in SelfTest).
+    // We switch to those threads by saying that the "main" thread
     // is finished, preventing it from returning.
-    currentThread->Finish();	
+    currentThread->Finish();
     // not reached
 }
 
@@ -115,16 +115,16 @@ void
 ThreadedKernel::SelfTest() {
    Semaphore *semaphore;
    SynchList<int> *synchList;
-   
+
    LibSelfTest();		// test library routines
-   
+
    currentThread->SelfTest();	// test thread switching
-   
+
    				// test semaphore operation
    semaphore = new Semaphore("test", 0);
    semaphore->SelfTest();
    delete semaphore;
-   
+
    				// test locks, condition variables
 				// using synchronized lists
    synchList = new SynchList<int>;

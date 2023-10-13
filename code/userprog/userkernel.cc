@@ -1,9 +1,9 @@
-// userkernel.cc 
+// userkernel.cc
 //	Initialization and cleanup routines for the version of the
 //	Nachos kernel that supports running user programs.
 //
 // Copyright (c) 1992-1996 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #include "copyright.h"
@@ -13,11 +13,11 @@
 
 //----------------------------------------------------------------------
 // UserProgKernel::UserProgKernel
-// 	Interpret command line arguments in order to determine flags 
-//	for the initialization (see also comments in main.cc)  
+// 	Interpret command line arguments in order to determine flags
+//	for the initialization (see also comments in main.cc)
 //----------------------------------------------------------------------
 
-UserProgKernel::UserProgKernel(int argc, char **argv) 
+UserProgKernel::UserProgKernel(int argc, char **argv)
 		: ThreadedKernel(argc, argv)
 {
     debugUserProg = FALSE;
@@ -80,7 +80,7 @@ UserProgKernel::~UserProgKernel()
 
 //----------------------------------------------------------------------
 // UserProgKernel::Run
-// 	Run the Nachos kernel.  For now, just run the "halt" program. 
+// 	Run the Nachos kernel.  For now, just run the "halt" program.
 //----------------------------------------------------------------------
 void
 ForkExecute(Thread *t)
@@ -128,7 +128,7 @@ UserProgKernel::SelfTest() {
 
     // test out the console device
 
-    cout << "Testing the console device.\n" 
+    cout << "Testing the console device.\n"
 	<< "Typed characters will be echoed, until q is typed.\n"
     	<< "Note newlines are needed to flush input through UNIX.\n";
     cout.flush();
