@@ -213,6 +213,8 @@ Interrupt::YieldOnReturn()
 void Interrupt::Idle()
 {
     DEBUG(dbgInt, "Machine idling; checking for interrupts.");
+    //
+    //cout << "Machine idling; checking for interrupts." << endl;
     status = IdleMode;
     if (CheckIfDue(TRUE))
     {	// check for any pending interrupts

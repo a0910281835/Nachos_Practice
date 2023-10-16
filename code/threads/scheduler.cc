@@ -159,6 +159,7 @@ void Scheduler::Run (Thread *nextThread, bool finishing)
     nextThread->setStatus(RUNNING);      // nextThread is now running
 
     DEBUG(dbgThread, "Switching from: " << oldThread->getName() << " to: " << nextThread->getName());
+    //
     //cout << "Switch " << oldThread->getName() << " to " << nextThread->getName() << endl;
 
     // This is a machine-dependent assembly language routine defined

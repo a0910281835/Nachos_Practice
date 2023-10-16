@@ -21,6 +21,38 @@
 #include "utility.h"
 #include "callback.h"
 #include "timer.h"
+#include <list>
+#include "thread.h"
+
+#define  THREAD_NOT_FINISH false
+#define  THREAD_FINISH     true
+
+
+
+
+class sleepThread
+{
+    public:
+        sleepThread(Thread* t, int x) : sleeper(t), when(x) {};
+        Thread* sleeper;
+        int when;
+};
+
+
+class sleepList
+{
+    public :
+        sleepList();
+        void PutToSleep(Thread *t, int x); // Put thread to waiting queue for type : Sleep.
+        bool PutToReady(); // using time sharing this interrupt to check waiting queue can put to ready queue.
+        bool IsEmpty();
+        void Get_Current_Interrupt_Val();
+    private:
+        int _current_interrupt;
+        std::list<sleepThread> waittingQueue_sleepThread;
+};
+
+
 
 // The following class defines a software alarm clock.
 class Alarm : public CallBackObj
@@ -31,11 +63,11 @@ class Alarm : public CallBackObj
         //~Alarm() { cout << " delete timer class " << endl;delete timer; }
         ~Alarm();
 
-        void WaitUntil(int x);	// suspend execution until time > now + x
+        void WaitUntil(int timing);	// suspend execution until time > now + timing
 
     private:
         Timer *timer;		// the hardware timer device
-
+        sleepList _sleepList;
         void CallBack();		// called when the hardware
                                 // timer generates an interrupt
 };

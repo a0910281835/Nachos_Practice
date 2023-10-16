@@ -11,7 +11,17 @@
 #include "copyright.h"
 #include "alarm.h"
 #include "main.h"
+void sleepList::Get_Current_Interrupt_Val()
+{
+    //
+    //cout << "Get value : " << _current_interrupt << endl;
+}
 
+sleepList::sleepList()
+{
+    //cout << " sleepList Init" << endl;
+    _current_interrupt = 0;
+}
 //----------------------------------------------------------------------
 // Alarm::Alarm
 //      Initialize a software alarm clock.  Start up a timer device
@@ -19,6 +29,7 @@
 //      "doRandom" -- if true, arrange for the hardware interrupts to
 //		occur at random, instead of fixed, intervals.
 //----------------------------------------------------------------------
+
 
 Alarm::Alarm(bool doRandom)
 {
@@ -61,11 +72,13 @@ void Alarm::CallBack()
     //cout << "time alarm" <<endl;
     Interrupt *interrupt = kernel->interrupt;
     MachineStatus status = interrupt->getStatus();
+    //_sleepList.Get_Current_Interrupt_Val();
+    bool woken = _sleepList.PutToReady();
 
     kernel->currentThread->setPriority(kernel->currentThread->getPriority() - 1);
-    if (status == IdleMode)
+    if (status == IdleMode && !woken && _sleepList.IsEmpty())
     {	// is it time to quit?
-        //cout << "Cond1" << endl;
+        cout << "Cond1" << endl;
         if (!interrupt->AnyFutureInterrupts())
         {
             timer->Disable();	// turn off the timer
@@ -82,3 +95,51 @@ void Alarm::CallBack()
     }
 }
 
+
+
+
+void Alarm::WaitUntil(int timing)
+{
+    IntStatus oldLevel = kernel->interrupt->SetLevel(IntOff);
+    Thread* t = kernel->currentThread;
+    //cout << "Alarm::WaitUntil go sleep" << endl;
+    _sleepList.PutToSleep(t, timing);
+    kernel->interrupt->SetLevel(oldLevel);
+}
+
+
+bool sleepList::IsEmpty()
+{
+    return waittingQueue_sleepThread.size() == 0;
+}
+
+
+
+void sleepList::PutToSleep(Thread*t, int x)
+{
+    ASSERT(kernel->interrupt->getLevel() == IntOff);
+    waittingQueue_sleepThread.push_back(sleepThread(t, _current_interrupt + x));
+    t->Sleep(THREAD_NOT_FINISH);
+}
+
+
+bool sleepList::PutToReady()
+{
+    bool woken = false;
+    _current_interrupt++;
+    for (std::list<sleepThread>::iterator it = waittingQueue_sleepThread.begin(); it != waittingQueue_sleepThread.end(); )
+    {
+        if (_current_interrupt >= it->when)
+        {
+            woken = true;
+            //cout << "sleepList::PutToReady Thread woken" << endl;
+            kernel->scheduler->ReadyToRun(it->sleeper);
+            it = waittingQueue_sleepThread.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
+    return woken;
+}
