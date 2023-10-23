@@ -30,14 +30,26 @@
 
 
 
+
 class sleepThread
 {
     public:
-        sleepThread(Thread* t, int x) : sleeper(t), when(x) {};
+        sleepThread(Thread* t, int x) : sleeper(t), when(x), prev(NULL), next(NULL) {};
         Thread* sleeper;
         int when;
+        sleepThread *prev;
+        sleepThread *next;
 };
 
+class T_SLEEP_LIST
+{
+    public :
+        T_SLEEP_LIST(sleepThread * p1, sleepThread * p2) : pHead(p1), pTail(p2) {};
+        sleepThread * pHead;
+        sleepThread * pTail;
+        bool IsListEmpty();
+
+};
 
 class sleepList
 {
@@ -50,6 +62,7 @@ class sleepList
     private:
         int _current_interrupt;
         std::list<sleepThread> waittingQueue_sleepThread;
+        T_SLEEP_LIST *pWaitQueue;
 };
 
 

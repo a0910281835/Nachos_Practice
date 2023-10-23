@@ -20,6 +20,7 @@ void sleepList::Get_Current_Interrupt_Val()
 sleepList::sleepList()
 {
     //cout << " sleepList Init" << endl;
+    pWaitQueue = new T_SLEEP_LIST(NULL, NULL);
     _current_interrupt = 0;
 }
 //----------------------------------------------------------------------
