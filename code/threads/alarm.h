@@ -44,10 +44,12 @@ class sleepThread
 class T_SLEEP_LIST
 {
     public :
-        T_SLEEP_LIST(sleepThread * p1, sleepThread * p2) : pHead(p1), pTail(p2) {};
+        T_SLEEP_LIST();
         sleepThread * pHead;
         sleepThread * pTail;
         bool IsListEmpty();
+        void InsertSleepList(Thread* pT, int sleepTiming);
+        Thread* PopWaittingQueue(void);
 
 };
 

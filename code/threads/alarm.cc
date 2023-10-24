@@ -11,6 +11,99 @@
 #include "copyright.h"
 #include "alarm.h"
 #include "main.h"
+
+
+
+T_SLEEP_LIST :: T_SLEEP_LIST()
+{
+    pHead = NULL;
+    pTail = NULL;
+}
+
+
+bool T_SLEEP_LIST :: IsListEmpty()
+{
+    bool ret = false;
+    if (pHead == NULL) ret = true;
+    return ret;
+}
+
+void T_SLEEP_LIST :: InsertSleepList(Thread* pThread, int sleepTiming)
+{
+    // Construct  Node to Insert
+    sleepThread *pNode = new sleepThread(pThread, sleepTiming);
+
+    //
+     if (IsListEmpty())
+     {
+         pHead = pNode;
+         pTail = pNode;
+     }
+     else
+     {
+        sleepThread *pCurrent = pTail;
+        bool keepFindFlag = (pCurrent->when > pNode->when) ? true : false;
+
+        while (keepFindFlag)
+        {
+            if (pCurrent->prev != NULL)
+            {
+                pCurrent = pCurrent->prev;
+            }
+            else
+            {
+                break;
+            }
+
+            keepFindFlag = (pCurrent->when > pNode->when) ? true : false;
+        }
+
+        // list has someone priority > you !
+        if (!keepFindFlag)
+        {
+            if (pCurrent->next != NULL)
+            {
+                (pCurrent->next)->prev = pNode;
+                pNode->next = (pCurrent->next);
+
+            }
+            pCurrent->next = pNode;
+            pNode->prev = pCurrent;
+        }
+        else
+        {
+            pCurrent->prev = pNode;
+            pNode->next = pCurrent;
+            pHead = pNode;
+        }
+
+     }
+
+}
+
+Thread* T_SLEEP_LIST :: PopWaittingQueue(void)
+{
+    sleepThread *pPopNode = pHead;
+    Thread*  pThread = NULL;
+    if (!IsListEmpty())
+    {
+        pThread = pHead->sleeper;
+        pHead = pHead->next;
+        pPopNode->next = NULL;
+        if (pHead == NULL)
+        {
+            pTail = NULL;
+        }
+        else
+        {
+            pHead->prev = NULL;
+        }
+        delete pPopNode;
+    }
+
+    return pThread;
+}
+
 void sleepList::Get_Current_Interrupt_Val()
 {
     //
@@ -20,7 +113,7 @@ void sleepList::Get_Current_Interrupt_Val()
 sleepList::sleepList()
 {
     //cout << " sleepList Init" << endl;
-    pWaitQueue = new T_SLEEP_LIST(NULL, NULL);
+    pWaitQueue = new T_SLEEP_LIST();
     _current_interrupt = 0;
 }
 //----------------------------------------------------------------------
