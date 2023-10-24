@@ -86,6 +86,7 @@ Scheduler::ReadyToRun (Thread *thread)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
+    cout << "Putting thread on ready list: " << thread->getName() << endl;
 
     thread->setStatus(READY);
     readyList->Append(thread);
@@ -175,7 +176,7 @@ void Scheduler::Run (Thread *nextThread, bool finishing)
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
     DEBUG(dbgThread, "Now in thread: " << oldThread->getName());
-    //cout << "Now in thread: " << oldThread->getName() << endl;
+    cout << "Now in thread: " << oldThread->getName() << endl;
 
     CheckToBeDestroyed();		// check if thread we were running
                                 // before this one has finished

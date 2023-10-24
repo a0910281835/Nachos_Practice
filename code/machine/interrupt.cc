@@ -131,7 +131,9 @@ IntStatus Interrupt::SetLevel(IntStatus now)
     ChangeLevel(old, now);			// change to new state
     if ((now == IntOn) && (old == IntOff))
     {
+        cout << "set -level -start" << endl;
         OneTick();				// advance simulated time
+        cout << "set -level -end" << endl;
     }
     return old;
 }

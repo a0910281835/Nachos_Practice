@@ -61,6 +61,7 @@ void Machine::Run()
     for (;;)
     {
         OneInstruction(instr);
+        cout << "do a process " << endl;
         kernel->interrupt->OneTick();
         if (singleStep && (runUntilTime <= kernel->stats->totalTicks))
             Debugger();

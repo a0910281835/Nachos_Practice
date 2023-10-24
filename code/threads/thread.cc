@@ -220,6 +220,11 @@ void Thread::Yield ()
         kernel->scheduler->ReadyToRun(this);
         kernel->scheduler->Run(nextThread, FALSE);
     }
+    else
+    {
+        cout << "ready queue no one" << endl;
+
+    }
     (void) kernel->interrupt->SetLevel(oldLevel);
 }
 
@@ -256,10 +261,15 @@ void Thread::Sleep (bool finishing)
 
     status = BLOCKED;
     while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL)
+    {
         kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+        cout << "STUCK here " << endl;
+    }
+    cout << " exit " << nextThread->getName() << endl;
 
     // returns when it's time for us to run
     kernel->scheduler->Run(nextThread, finishing);
+    cout << "sleep thread end" << endl;
 }
 
 //----------------------------------------------------------------------
