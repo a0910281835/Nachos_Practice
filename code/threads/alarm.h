@@ -50,6 +50,7 @@ class T_SLEEP_LIST
         bool IsListEmpty();
         void InsertSleepList(Thread* pT, int sleepTiming);
         Thread* PopWaittingQueue(void);
+        int PeekTopSleepTime();
 
 };
 

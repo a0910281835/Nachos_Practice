@@ -104,6 +104,18 @@ Thread* T_SLEEP_LIST :: PopWaittingQueue(void)
     return pThread;
 }
 
+int T_SLEEP_LIST :: PeekTopSleepTime()
+{
+    sleepThread *pPopNode = pHead;
+    int wakingTime = -1;
+    if (!IsListEmpty())
+    {
+        wakingTime = pHead->when;
+    }
+
+    return wakingTime;
+}
+
 void sleepList::Get_Current_Interrupt_Val()
 {
     //
@@ -204,7 +216,8 @@ void Alarm::WaitUntil(int timing)
 
 bool sleepList::IsEmpty()
 {
-    return waittingQueue_sleepThread.size() == 0;
+    //return waittingQueue_sleepThread.size() == 0;
+    return pWaitQueue->IsListEmpty();
 }
 
 
@@ -212,7 +225,8 @@ bool sleepList::IsEmpty()
 void sleepList::PutToSleep(Thread*t, int x)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
-    waittingQueue_sleepThread.push_back(sleepThread(t, _current_interrupt + x));
+    pWaitQueue->InsertSleepList(t, (_current_interrupt + x));
+    //waittingQueue_sleepThread.push_back(sleepThread(t, _current_interrupt + x));
     t->Sleep(THREAD_NOT_FINISH);
 }
 
@@ -221,19 +235,39 @@ bool sleepList::PutToReady()
 {
     bool woken = false;
     _current_interrupt++;
-    for (std::list<sleepThread>::iterator it = waittingQueue_sleepThread.begin(); it != waittingQueue_sleepThread.end(); )
+    int timing = -1;
+    Thread* pT = NULL;
+
+    while (!IsEmpty())
     {
-        if (_current_interrupt >= it->when)
+        timing = pWaitQueue->PeekTopSleepTime();
+        if (_current_interrupt >= timing)
         {
             woken = true;
-            //cout << "sleepList::PutToReady Thread woken" << endl;
-            kernel->scheduler->ReadyToRun(it->sleeper);
-            it = waittingQueue_sleepThread.erase(it);
+            pT = pWaitQueue->PopWaittingQueue();
+            kernel->scheduler->ReadyToRun(pT);
         }
         else
         {
-            it++;
+            break;
         }
+
+
     }
+
+    //for (std::list<sleepThread>::iterator it = waittingQueue_sleepThread.begin(); it != waittingQueue_sleepThread.end(); )
+    //{
+    //    if (_current_interrupt >= it->when)
+    //    {
+    //        woken = true;
+    //        //cout << "sleepList::PutToReady Thread woken" << endl;
+    //        kernel->scheduler->ReadyToRun(it->sleeper);
+    //        it = waittingQueue_sleepThread.erase(it);
+    //    }
+    //    else
+    //    {
+    //        it++;
+    //    }
+    //}
     return woken;
 }
