@@ -66,7 +66,7 @@ Thread::~Thread()
 {
     DEBUG(dbgThread, "Deleting thread: " << name);
     //
-    //cout << "kill thread using delete thread and name : " << name << endl;
+    cout << "kill thread using delete thread and name : " << name << endl;
 
     ASSERT(this != kernel->currentThread);
     if (stack != NULL)
@@ -212,7 +212,7 @@ void Thread::Yield ()
     ASSERT(this == kernel->currentThread);
 
     DEBUG(dbgThread, "Yielding thread: " << name);
-    //cout << "Yielding thread: " << name << endl;
+    cout << "Yielding thread: " << name << endl;
 
     nextThread = kernel->scheduler->FindNextToRun();
     if (nextThread != NULL)
@@ -252,6 +252,7 @@ void Thread::Sleep (bool finishing)
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
     DEBUG(dbgThread, "Sleeping thread: " << name);
+    cout << "Sleep thread name : " << name << endl;
 
     status = BLOCKED;
     while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL)

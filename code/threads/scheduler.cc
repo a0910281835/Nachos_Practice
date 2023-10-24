@@ -160,7 +160,7 @@ void Scheduler::Run (Thread *nextThread, bool finishing)
 
     DEBUG(dbgThread, "Switching from: " << oldThread->getName() << " to: " << nextThread->getName());
     //
-    //cout << "Switch " << oldThread->getName() << " to " << nextThread->getName() << endl;
+    cout << "Switch " << oldThread->getName() << " to " << nextThread->getName() << endl;
 
     // This is a machine-dependent assembly language routine defined
     // in switch.s.  You may have to think
@@ -202,7 +202,7 @@ void Scheduler::CheckToBeDestroyed()
 {
     if (toBeDestroyed != NULL)
     {
-        //cout << "here" << endl;
+        cout << "Destory "  << toBeDestroyed->getName() << endl;
         delete toBeDestroyed;
         toBeDestroyed = NULL;
     }

@@ -86,7 +86,7 @@ void Alarm::CallBack()
     }
     else
     {			// there's someone to preempt
-        //cout << "Cond2" << endl;
+        cout << "Cond2" << endl;
         // There use RR
         if(kernel->scheduler->getSchedulerType() == RR || kernel->scheduler->getSchedulerType() == Priority )
         {

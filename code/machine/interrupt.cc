@@ -162,6 +162,7 @@ void Interrupt::OneTick()
         stats->userTicks += UserTick;
     }
     DEBUG(dbgInt, "== Tick " << stats->totalTicks << " ==");
+    cout << "== Tick " << stats->totalTicks << " ==" << endl;
 
     // check any pending interrupts are now ready to fire
     ChangeLevel(IntOn, IntOff);	// first, turn off interrupts
@@ -214,7 +215,7 @@ void Interrupt::Idle()
 {
     DEBUG(dbgInt, "Machine idling; checking for interrupts.");
     //
-    //cout << "Machine idling; checking for interrupts." << endl;
+    cout << "Machine idling; checking for interrupts." << endl;
     status = IdleMode;
     if (CheckIfDue(TRUE))
     {	// check for any pending interrupts
@@ -308,15 +309,15 @@ bool Interrupt::CheckIfDue(bool advanceClock)
             return FALSE;
         }
         else
-        {      		// advance the clock to next interrupt
+        {      	// advance the clock to next interrupt
             stats->idleTicks += (next->when - stats->totalTicks);
             stats->totalTicks = next->when;
-            //cout << "Jump to Next Interrupt" << endl;
+            cout << "Jump to Next Interrupt" << endl;
         }
     }
 
-    //cout << "Invoking interrupt handler for the " << endl;
-    //cout << intTypeNames[next->type] << " at time " << next->when << endl;
+    cout << "Invoking interrupt handler for the " << endl;
+    cout << intTypeNames[next->type] << " at time " << next->when << endl;
     DEBUG(dbgInt, "Invoking interrupt handler for the ");
     DEBUG(dbgInt, intTypeNames[next->type] << " at time " << next->when);
 #ifdef USER_PROGRAM

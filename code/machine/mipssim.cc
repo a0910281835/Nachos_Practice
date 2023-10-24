@@ -64,8 +64,8 @@ void Machine::Run()
         kernel->interrupt->OneTick();
         if (singleStep && (runUntilTime <= kernel->stats->totalTicks))
             Debugger();
-        //cout << "Starting program in thread: " << kernel->currentThread->getName();
-        //cout << ", at time: " << kernel->stats->totalTicks << "\n";
+        cout << "Starting program in thread: " << kernel->currentThread->getName();
+        cout << ", at time: " << kernel->stats->totalTicks << "\n";
     }
 }
 
