@@ -66,7 +66,7 @@ Thread::~Thread()
 {
     DEBUG(dbgThread, "Deleting thread: " << name);
     //
-    //cout << "kill thread using delete thread and name : " << name << endl;
+    cout << "kill thread using delete thread and name : " << name << endl;
 
     ASSERT(this != kernel->currentThread);
     if (stack != NULL)
@@ -212,13 +212,18 @@ void Thread::Yield ()
     ASSERT(this == kernel->currentThread);
 
     DEBUG(dbgThread, "Yielding thread: " << name);
-    //cout << "Yielding thread: " << name << endl;
+    cout << "Yielding thread: " << name << endl;
 
     nextThread = kernel->scheduler->FindNextToRun();
     if (nextThread != NULL)
     {
         kernel->scheduler->ReadyToRun(this);
         kernel->scheduler->Run(nextThread, FALSE);
+    }
+    else
+    {
+        cout << "ready queue no one" << endl;
+
     }
     (void) kernel->interrupt->SetLevel(oldLevel);
 }
@@ -252,13 +257,19 @@ void Thread::Sleep (bool finishing)
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
     DEBUG(dbgThread, "Sleeping thread: " << name);
+    cout << "Sleep thread name : " << name << endl;
 
     status = BLOCKED;
     while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL)
+    {
         kernel->interrupt->Idle();	// no one to run, wait for an interrupt
+        cout << "STUCK here " << endl;
+    }
+    cout << " exit " << nextThread->getName() << endl;
 
     // returns when it's time for us to run
     kernel->scheduler->Run(nextThread, finishing);
+    cout << "sleep thread end" << endl;
 }
 
 //----------------------------------------------------------------------

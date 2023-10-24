@@ -2,7 +2,7 @@
 void main(void)
 {
     int	n;
-    for (n = 0; n < 20; n++)
+    for (n = 0; n < 25; n++)
     {
         Sleep(2);
         PrintInt(10);
