@@ -21,6 +21,7 @@ UserProgKernel::UserProgKernel(int argc, char **argv) : ThreadedKernel(argc, arg
 {
     debugUserProg = FALSE;
     execfileNum=0;
+    cout << "user kernel be created" << endl;
     for (int i = 1; i < argc; i++)
     {
         if (strcmp(argv[i], "-s") == 0)

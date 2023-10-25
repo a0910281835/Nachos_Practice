@@ -26,6 +26,7 @@ ThreadedKernel::ThreadedKernel(int argc, char **argv)
 {
     randomSlice = FALSE;
     type = RR;
+    cout << "thread kernel be created" << endl;
 
     for (int i = 1; i < argc; i++)
     {

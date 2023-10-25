@@ -108,6 +108,7 @@ Interrupt::ChangeLevel(IntStatus old, IntStatus now)
 {
     level = now;
     DEBUG(dbgInt, "\tinterrupts: " << intLevelNames[old] << " -> " << intLevelNames[now]);
+    cout << "\tinterrupts: " << intLevelNames[old] << " -> " << intLevelNames[now] << endl;
 }
 
 //----------------------------------------------------------------------

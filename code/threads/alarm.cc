@@ -36,12 +36,14 @@ void T_SLEEP_LIST :: InsertSleepList(Thread* pThread, int sleepTiming)
     //
      if (IsListEmpty())
      {
+         cout << "before inset the wait queue is empty" << endl;
          pHead = pNode;
          pTail = pNode;
      }
      else
      {
         sleepThread *pCurrent = pTail;
+        cout << "current when " << pCurrent->when << "Node when : " << pNode->when << endl;
         bool keepFindFlag = (pCurrent->when > pNode->when) ? true : false;
 
         while (keepFindFlag)
@@ -67,6 +69,10 @@ void T_SLEEP_LIST :: InsertSleepList(Thread* pThread, int sleepTiming)
                 pNode->next = (pCurrent->next);
 
             }
+            else // XXX : Careful you may be the last
+            {
+                pTail = pNode;
+            }
             pCurrent->next = pNode;
             pNode->prev = pCurrent;
         }
@@ -74,6 +80,7 @@ void T_SLEEP_LIST :: InsertSleepList(Thread* pThread, int sleepTiming)
         {
             pCurrent->prev = pNode;
             pNode->next = pCurrent;
+            pNode->prev = NULL;
             pHead = pNode;
         }
 
@@ -90,6 +97,7 @@ Thread* T_SLEEP_LIST :: PopWaittingQueue(void)
         pThread = pHead->sleeper;
         pHead = pHead->next;
         pPopNode->next = NULL;
+        pPopNode->prev = NULL;
         if (pHead == NULL)
         {
             pTail = NULL;
@@ -114,6 +122,20 @@ int T_SLEEP_LIST :: PeekTopSleepTime()
     }
 
     return wakingTime;
+}
+
+
+int T_SLEEP_LIST :: ListSize()
+{
+    int sizeList = 0;
+    sleepThread *pTravelNode = pHead;
+    while (pTravelNode!= NULL)
+    {
+        sizeList++;
+        pTravelNode = pTravelNode->next;
+    }
+
+    return sizeList;
 }
 
 void sleepList::Get_Current_Interrupt_Val()
@@ -225,7 +247,9 @@ bool sleepList::IsEmpty()
 void sleepList::PutToSleep(Thread*t, int x)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
+    cout << "Before Inset Waiting Queue, and Waitting Queue size : " << pWaitQueue->ListSize() << endl;
     pWaitQueue->InsertSleepList(t, (_current_interrupt + x));
+    cout << "After Inset Waiting Queue, and Waiting Queue size : " << pWaitQueue->ListSize() << endl;
     //waittingQueue_sleepThread.push_back(sleepThread(t, _current_interrupt + x));
     t->Sleep(THREAD_NOT_FINISH);
 }
@@ -237,6 +261,8 @@ bool sleepList::PutToReady()
     _current_interrupt++;
     int timing = -1;
     Thread* pT = NULL;
+
+    cout << "Waiting Queue size : " << pWaitQueue->ListSize() << endl;
 
     while (!IsEmpty())
     {

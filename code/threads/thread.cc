@@ -100,6 +100,7 @@ void Thread::Fork(VoidFunctionPtr func, void *arg)
     IntStatus oldLevel;
 
     DEBUG(dbgThread, "Forking thread: " << name << " f(a): " << (int) func << " " << arg);
+    cout << "Forking thread : " << name << " function entry : " << (int) func << " " << arg << endl;
 
     StackAllocate(func, arg);
 

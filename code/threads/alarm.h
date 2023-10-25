@@ -51,6 +51,7 @@ class T_SLEEP_LIST
         void InsertSleepList(Thread* pT, int sleepTiming);
         Thread* PopWaittingQueue(void);
         int PeekTopSleepTime();
+        int ListSize();
 
 };
 
@@ -64,7 +65,7 @@ class sleepList
         void Get_Current_Interrupt_Val();
     private:
         int _current_interrupt;
-        std::list<sleepThread> waittingQueue_sleepThread;
+        //std::list<sleepThread> waittingQueue_sleepThread;
         T_SLEEP_LIST *pWaitQueue;
 };
 
