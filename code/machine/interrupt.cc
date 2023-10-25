@@ -171,7 +171,7 @@ void Interrupt::OneTick()
     ChangeLevel(IntOn, IntOff);	// first, turn off interrupts
                                 // (interrupt handlers run with
                                 // interrupts disabled)
-    CheckIfDue(FALSE);		// check for pending interrupts
+    CheckIfDue(FALSE);		// check for pending interrupts XXX : interrupt handler , disable interrupt isr 
     ChangeLevel(IntOff, IntOn);	// re-enable interrupts
     if (yieldOnReturn)
     {	// if the timer device handler asked
