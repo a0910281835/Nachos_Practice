@@ -65,6 +65,11 @@ const int StackSize = (4 * 1024);	// in words
 enum ThreadStatus { JUST_CREATED, RUNNING, READY, BLOCKED };
 
 
+#define  THREAD_NOT_FINISH false
+#define  THREAD_FINISH     true
+
+
+
 // The following class defines a "thread control block" -- which
 // represents a single thread of execution.
 //

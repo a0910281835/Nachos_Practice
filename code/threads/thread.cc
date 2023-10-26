@@ -183,7 +183,7 @@ void Thread::Finish ()
     DEBUG(dbgThread, "Finishing thread: " << name);
     //cout << "Finishing thread: " << name << endl;
 
-    Sleep(TRUE);				// invokes SWITCH
+    Sleep(THREAD_FINISH);				// invokes SWITCH
                                 // not reached
 }
 

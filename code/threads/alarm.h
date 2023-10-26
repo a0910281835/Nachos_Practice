@@ -24,8 +24,6 @@
 #include <list>
 #include "thread.h"
 
-#define  THREAD_NOT_FINISH false
-#define  THREAD_FINISH     true
 
 
 
