@@ -191,6 +191,10 @@ void AddrSpace::Execute(char *fileName)
         cout << "inside !Load(FileName)" << endl;
         return;				// executable not found
     }
+    else
+    {
+        cout << "load file : " << fileName << endl;
+    }
 
     //kernel->currentThread->space = this;
     //cout << "first time ? " << endl;

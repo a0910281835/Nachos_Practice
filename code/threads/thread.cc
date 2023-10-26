@@ -154,7 +154,7 @@ void Thread::Begin ()
 {
     ASSERT(this == kernel->currentThread);
     DEBUG(dbgThread, "Beginning thread: " << name);
-    //cout << "Begining thread " << endl;
+    cout << "Begining thread :  " << getName()  << endl;
 
     kernel->scheduler->CheckToBeDestroyed();
     kernel->interrupt->Enable();
